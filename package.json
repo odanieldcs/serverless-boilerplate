@@ -9,7 +9,7 @@
     "format": "prettier --write 'src/**/*.{ts,js}'"
   },
   "engines": {
-    "node": ">=14.15.0"
+    "node": ">=16.13.1"
   },
   "author": "Daniel Castro <daniel@danieldcs.com> (https://danieldcs.com)",
   "license": "MIT",

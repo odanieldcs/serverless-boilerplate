@@ -7,7 +7,10 @@
     "dev": "serverless offline",
     "lint": "eslint --ext .ts,.js src",
     "lint:fix": "eslint --ext .ts,.js src --fix",
-    "format": "prettier --write 'src/**/*.{ts,js}'"
+    "format": "prettier --write 'src/**/*.{ts,js}'",
+    "test": "jest --passWithNoTests --noStackTrace",
+		"test:debug": "jest --debug --runInBand",
+		"test:coverage": "jest --passWithNoTests --noStackTrace --runInBand --coverage"
   },
   "engines": {
     "node": ">=16.13.1"
@@ -15,6 +18,7 @@
   "author": "Daniel Castro <daniel@danieldcs.com> (https://danieldcs.com)",
   "license": "MIT",
   "devDependencies": {
+    "@types/jest": "^27.0.3",
     "@typescript-eslint/eslint-plugin": "^5.7.0",
     "@typescript-eslint/parser": "^5.7.0",
     "eslint": "^8.4.1",
@@ -22,6 +26,7 @@
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^27.4.5",
     "prettier": "^2.5.1",
     "serverless": "^2.69.0",
     "serverless-offline": "^8.3.1",

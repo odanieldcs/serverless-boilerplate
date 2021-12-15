@@ -1,0 +1,57 @@
+
+on:
+  pull_request:
+    branches:
+      - 'staging'
+
+name: Staging Deploy
+
+jobs:
+  lint:
+    name: linter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+
+  build:
+    name: build
+    needs: lint
+    runs-on: ubuntu-latest
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+
+  tests:
+    needs: build
+    name: tests
+
+  deploy:
+    need: tests
+    name: deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    
+      - name: Serverless deploy
+        uses: serverless/github-action@master
+        with:
+          args: deploy --stage staging

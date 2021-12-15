@@ -28,3 +28,11 @@ functions:
           method: get
           path: /health
           cors: true
+
+    books:
+        handler: src/routers/index.getAllBooks
+        events:
+          - http:
+              method: get
+              path: /books
+              cors: true

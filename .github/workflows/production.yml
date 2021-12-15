@@ -24,7 +24,7 @@ jobs:
         run: npm ci
 
   tests:
-    needs: build
+    need: build
     name: tests
     steps:
       - name: Install dependencies
@@ -50,7 +50,6 @@ jobs:
         node-version: [14.x]
 
     steps:
-    
       - name: Serverless deploy
         uses: serverless/github-action@master
         with:

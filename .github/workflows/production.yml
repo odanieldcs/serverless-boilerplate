@@ -1,26 +1,15 @@
 
 on:
-  push:
-    branches:
-      - 'staging'
   workflow_dispatch:
+    branches:
+      - 'main'
 
-name: Deployment Staging
+name: Production Deploy
 
 jobs:
-  deploy:
-    name: deploy
+  build:
+    name: build
     runs-on: ubuntu-latest
-    environment:
-      name: staging
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    strategy:
-      matrix:
-        node-version: [14.x]
-
-    steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
       
@@ -33,6 +22,25 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+  tests:
+    needs: build
+    name: tests
+
+  deploy:
+    need: tests
+    name: deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    
       - name: Serverless deploy
         uses: serverless/github-action@master
         with:

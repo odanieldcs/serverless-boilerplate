@@ -13,7 +13,7 @@
 		"test:coverage": "jest --passWithNoTests --noStackTrace --runInBand --coverage"
   },
   "engines": {
-    "node": ">=16.13.1"
+    "node": ">=14.X"
   },
   "author": "Daniel Castro <daniel@danieldcs.com> (https://danieldcs.com)",
   "license": "MIT",

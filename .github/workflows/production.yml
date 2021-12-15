@@ -1,0 +1,74 @@
+name: CI/CD Production
+
+on:
+  workflow_dispatch:
+    branches:
+      - 'main'
+    
+jobs:
+  tests:
+    name: tests
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+      
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != true
+        run: npm ci --ignore-scripts
+      - run: npm run lint
+      - run: npm run test:coverage
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: "./coverage/lcov.info"
+
+  deploy:
+    needs: tests
+    name: deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+      
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != true
+        run: npm ci --ignore-script
+      
+      - name: Serverless deploy
+        uses: serverless/github-action@master
+        with:
+          args: deploy --stage production

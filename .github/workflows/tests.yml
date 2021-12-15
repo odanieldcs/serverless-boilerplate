@@ -1,10 +1,10 @@
 
 on:
-  push:
+  pull_request:
     branches:
       - 'main'
 
-name: Tests and Coverage
+name: Tests
 
 jobs:
   tests:

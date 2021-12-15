@@ -4,6 +4,7 @@
   "description": "Template Serverless Node.js API",
   "main": "serverless.ts",
   "scripts": {
+    "dev": "serverless offline",
     "lint": "eslint --ext .ts,.js src",
     "lint:fix": "eslint --ext .ts,.js src --fix",
     "format": "prettier --write 'src/**/*.{ts,js}'"

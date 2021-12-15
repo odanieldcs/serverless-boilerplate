@@ -25,6 +25,14 @@ jobs:
   tests:
     needs: build
     name: tests
+      - name: Install dependencies
+        run: npm run test:coverage
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: "./coverage/lcov.info"
 
   deploy:
     need: tests

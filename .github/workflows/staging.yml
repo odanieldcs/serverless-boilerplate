@@ -20,6 +20,7 @@ jobs:
     name: build
     needs: lint
     runs-on: ubuntu-latest
+    steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
       
@@ -35,6 +36,14 @@ jobs:
   tests:
     needs: build
     name: tests
+      - name: Install dependencies
+        run: npm run test:coverage
+        
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: "./coverage/lcov.info"
 
   deploy:
     need: tests
@@ -50,7 +59,6 @@ jobs:
         node-version: [14.x]
 
     steps:
-    
       - name: Serverless deploy
         uses: serverless/github-action@master
         with:

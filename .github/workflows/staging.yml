@@ -18,7 +18,7 @@ jobs:
 
   build:
     name: build
-    need: lint
+    needs: lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -34,8 +34,9 @@ jobs:
         run: npm ci
 
   tests:
-    need: build
+    needs: build
     name: tests
+    runs-on: ubuntu-latest
     steps:
       - name: Install dependencies
         run: npm run test:coverage
@@ -47,7 +48,7 @@ jobs:
           path-to-lcov: "./coverage/lcov.info"
 
   deploy:
-    need: tests
+    needs: tests
     name: deploy
     runs-on: ubuntu-latest
     environment:

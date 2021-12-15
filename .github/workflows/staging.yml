@@ -18,7 +18,7 @@ jobs:
 
   build:
     name: build
-    needs: lint
+    need: lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -34,7 +34,7 @@ jobs:
         run: npm ci
 
   tests:
-    needs: build
+    need: build
     name: tests
     steps:
       - name: Install dependencies

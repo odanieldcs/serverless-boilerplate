@@ -5,7 +5,7 @@ class BooksController {
 				title: 'Book Loren Ipsum',
 				isbn: '123456789',
 				author: 'Loren Ipsum',
-			}
+			},
 		];
 	}
 }

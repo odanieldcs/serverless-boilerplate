@@ -25,6 +25,7 @@ jobs:
   tests:
     needs: build
     name: tests
+    steps:
       - name: Install dependencies
         run: npm run test:coverage
 

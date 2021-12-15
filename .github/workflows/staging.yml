@@ -36,9 +36,10 @@ jobs:
   tests:
     needs: build
     name: tests
+    steps:
       - name: Install dependencies
         run: npm run test:coverage
-        
+
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
